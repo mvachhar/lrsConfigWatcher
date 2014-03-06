@@ -1,0 +1,22 @@
+{
+  "name": "lrsConfigWatcher",
+  "version": "0.1.0",
+  "description": "Module to watch for configuration changes on a LineRate device.",
+  "main": "lrsConfigWatcher.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mvachhar/lrsConfigWatcher.git"
+  },
+  "keywords": [
+    "LineRate"
+  ],
+  "author": "Manish Vachharajani (F5 Networks)",
+  "license": "BSD",
+
+  "dependencies": {
+    "lrsMangementRest": "https://api.github.com/repos/mvachhar/lrsManagementRest/tarball"
+  }
+}
