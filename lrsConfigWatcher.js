@@ -3,12 +3,15 @@
 
 // [Requires]
 // Node.js  Modules
-var fs = require("fs");
-var http = require("http");
-var timers = require("timers");
-var events = require("events");
-var util = require("util");
-var mgmtRest = require("lrsManagementRest");
+var fs = require('fs')
+  , http = require('http')
+  , timers = require('timers')
+  , events = require('events')
+  , util = require('util')
+  , mgmtRest = require('lrsManagementRest');
+
+var secs = process.argv.slice(2) || 5;
+var intervalMs = secs * 1000;
 
 function ConfigWatcher() {
     this.mgmt = new mgmtRest.Client();
@@ -28,7 +31,7 @@ ConfigWatcher.prototype.start = function(options) {
     }
 
     function pollForRunningConfigChange(mgmt, cb) {
-	var path = "/status/system/config/modified";
+	var path = '/status/system/config/modified';
 	mgmt.getJSON(path, 
 		     function(resp) {
 			 if(resp.statusCode != 200) {
@@ -61,11 +64,11 @@ ConfigWatcher.prototype.start = function(options) {
 		});
 	}
 	myCb(undefined);
-	timers.setInterval(myCb, 5000.0);
+	timers.setInterval(myCb, intervalMs);
     }
 
     function startWatch(mgmt) {
-	watchFileByName("/home/linerate/data/startup-config",
+	watchFileByName('/home/linerate/data/startup-config',
 			function() { 
 			    self.emit('startup-config-changed');
 			});
