@@ -12,6 +12,7 @@ var fs = require('fs')
 
 function ConfigWatcher() {
     this.mgmt = new mgmtRest.Client();
+    this.intervalMs = 5000.00 // 5 second default timer, just in case
 }
 
 util.inherits(ConfigWatcher, events.EventEmitter);
@@ -61,7 +62,7 @@ ConfigWatcher.prototype.start = function(options) {
 		});
 	}
 	myCb(undefined);
-	timers.setInterval(myCb, 5000.0);
+	timers.setInterval(myCb, self.intervalMs);
     }
 
     function startWatch(mgmt) {
@@ -81,8 +82,11 @@ ConfigWatcher.prototype.start = function(options) {
         port          : safeOpts.port        || 3001,
         path          : safeOpts.path        || '/login',
 	username      : safeOpts.username,
-        password      : safeOpts.password
+        password      : safeOpts.password,
+	interval      : safeOpts.interval    || 5
     };
+
+    self.intervalMs = localOptions.interval * 1000;
     
     mgmt.on('error', function(err) { self.emit('error', err); });
     mgmt.on('loginFailure',
