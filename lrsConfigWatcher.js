@@ -10,11 +10,10 @@ var fs = require('fs')
   , util = require('util')
   , mgmtRest = require('lrsManagementRest');
 
-var secs = process.argv.slice(2) || 5;
-var intervalMs = secs * 1000;
-
 function ConfigWatcher() {
     this.mgmt = new mgmtRest.Client();
+    this.intervalMs = 5000.00; // 5 second default timer, just in case
+    this.repeat = 5;
 }
 
 util.inherits(ConfigWatcher, events.EventEmitter);
@@ -64,7 +63,7 @@ ConfigWatcher.prototype.start = function(options) {
 		});
 	}
 	myCb(undefined);
-	timers.setInterval(myCb, intervalMs);
+	timers.setInterval(myCb, self.intervalMs);
     }
 
     function startWatch(mgmt) {
@@ -80,12 +79,18 @@ ConfigWatcher.prototype.start = function(options) {
 
     var safeOpts = options || {};
     var localOptions = {
-        host          : safeOpts.host        || '127.0.0.1',
-        port          : safeOpts.port        || 3001,
+        host          : safeOpts.host        || null,
+        port          : safeOpts.port        || null,
         path          : safeOpts.path        || '/login',
 	username      : safeOpts.username,
-        password      : safeOpts.password
+        password      : safeOpts.password,
+	interval      : safeOpts.interval    || 5,
+        repeat        : safeOpts.repeat      || 5
     };
+
+    console.log(localOptions);
+
+    self.intervalMs = localOptions.interval * 1000;
     
     mgmt.on('error', function(err) { self.emit('error', err); });
     mgmt.on('loginFailure',
