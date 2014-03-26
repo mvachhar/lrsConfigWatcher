@@ -13,7 +13,6 @@ var fs = require('fs')
 function ConfigWatcher() {
     this.mgmt = new mgmtRest.Client();
     this.intervalMs = 5000.00; // 5 second default timer, just in case
-    this.repeat = 5;
 }
 
 util.inherits(ConfigWatcher, events.EventEmitter);
@@ -84,8 +83,7 @@ ConfigWatcher.prototype.start = function(options) {
         path          : safeOpts.path        || '/login',
 	username      : safeOpts.username,
         password      : safeOpts.password,
-	interval      : safeOpts.interval    || 5,
-        repeat        : safeOpts.repeat      || 5
+	interval      : safeOpts.interval    || 5
     };
 
     console.log(localOptions);
